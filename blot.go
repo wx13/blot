@@ -28,7 +28,7 @@ func (b *Blot) AddLine(line Line) {
 
 func (b *Blot) Scale(xIn, yIn float64) (float64, float64) {
 	xOut := (xIn - b.OffsetX) * b.ScaleX
-	yOut := (yIn - b.OffsetY) * b.ScaleY
+	yOut := b.Height - (yIn - b.OffsetY) * b.ScaleY
 	return xOut, yOut
 }
 
