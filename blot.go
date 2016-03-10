@@ -16,6 +16,7 @@ type Blot struct {
 	Width, Height    float64
 	ScaleX, ScaleY   float64
 	OffsetX, OffsetY float64
+	Margin           float64
 }
 
 func NewBlot() *Blot {
@@ -28,7 +29,7 @@ func (b *Blot) AddLine(line Line) {
 
 func (b *Blot) Scale(xIn, yIn float64) (float64, float64) {
 	xOut := (xIn - b.OffsetX) * b.ScaleX
-	yOut := b.Height - (yIn - b.OffsetY) * b.ScaleY
+	yOut := b.Height - (yIn-b.OffsetY)*b.ScaleY
 	return xOut, yOut
 }
 
@@ -40,6 +41,7 @@ func (b *Blot) SetSize(width, height int) {
 	b.OffsetY = minY
 	b.ScaleX = b.Width / (maxX - minX)
 	b.ScaleY = b.Height / (maxY - minY)
+	b.Margin = b.Width / 20.0
 }
 
 func (b *Blot) GetMinMax() (minX, maxX, minY, maxY float64) {
@@ -69,20 +71,21 @@ func (b *Blot) GetMinMax() (minX, maxX, minY, maxY float64) {
 func (b *Blot) MakeAxes() string {
 
 	script := ""
-	script += "context.moveTo(0, 0);"
-	script += fmt.Sprintf("context.lineTo(%f, %f);", 0.0, b.Height)
-	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Width, b.Height)
-	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Width, 0.0)
-	script += fmt.Sprintf("context.lineTo(%f, %f);", 0.0, 0.0)
+	script += fmt.Sprintf("context.moveTo(%f, %f);", b.Margin, b.Margin)
+	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Margin, b.Height - b.Margin)
+	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Width - b.Margin, b.Height - b.Margin)
+	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Width - b.Margin, b.Margin)
+	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Margin, b.Margin)
 
 	minX, maxX, minY, maxY := b.GetMinMax()
-	script += `context.font = "20px Arial";`
+	fontSize := int(0.5*b.Margin)
+	script += fmt.Sprintf(`context.font = "%dpx Arial";`, fontSize)
 	script += `context.textAlign = "left";`
-	script += `context.textBaseline = "top";`
-	script += fmt.Sprintf(`context.fillText("%g", 0, 0);`, maxY)
+	script += `context.textBaseline = "middle";`
+	script += fmt.Sprintf(`context.fillText("%g", 0, %f);`, maxY, b.Margin)
 	script += `context.textAlign = "left";`
-	script += `context.textBaseline = "bottom";`
-	script += fmt.Sprintf(`context.fillText("%g", 0, %f);`, minY, b.Height)
+	script += `context.textBaseline = "middle";`
+	script += fmt.Sprintf(`context.fillText("%g", 0, %f);`, minY, b.Height-b.Margin)
 	fmt.Println(minX, maxX, minY, maxY)
 
 	return script
