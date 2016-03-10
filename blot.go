@@ -67,12 +67,24 @@ func (b *Blot) GetMinMax() (minX, maxX, minY, maxY float64) {
 }
 
 func (b *Blot) MakeAxes() string {
+
 	script := ""
 	script += "context.moveTo(0, 0);"
 	script += fmt.Sprintf("context.lineTo(%f, %f);", 0.0, b.Height)
 	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Width, b.Height)
 	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Width, 0.0)
 	script += fmt.Sprintf("context.lineTo(%f, %f);", 0.0, 0.0)
+
+	minX, maxX, minY, maxY := b.GetMinMax()
+	script += `context.font = "20px Arial";`
+	script += `context.textAlign = "left";`
+	script += `context.textBaseline = "top";`
+	script += fmt.Sprintf(`context.fillText("%g", 0, 0);`, maxY)
+	script += `context.textAlign = "left";`
+	script += `context.textBaseline = "bottom";`
+	script += fmt.Sprintf(`context.fillText("%g", 0, %f);`, minY, b.Height)
+	fmt.Println(minX, maxX, minY, maxY)
+
 	return script
 }
 
