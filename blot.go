@@ -12,9 +12,9 @@ type Line struct {
 }
 
 type Blot struct {
-	Lines []Line
-	Width, Height float64
-	ScaleX, ScaleY float64
+	Lines            []Line
+	Width, Height    float64
+	ScaleX, ScaleY   float64
 	OffsetX, OffsetY float64
 }
 
@@ -66,6 +66,16 @@ func (b *Blot) GetMinMax() (minX, maxX, minY, maxY float64) {
 	return
 }
 
+func (b *Blot) MakeAxes() string {
+	script := ""
+	script += "context.moveTo(0, 0);"
+	script += fmt.Sprintf("context.lineTo(%f, %f);", 0.0, b.Height)
+	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Width, b.Height)
+	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Width, 0.0)
+	script += fmt.Sprintf("context.lineTo(%f, %f);", 0.0, 0.0)
+	return script
+}
+
 func (b *Blot) Plot(id string, width, height int) string {
 
 	b.SetSize(width, height)
@@ -74,6 +84,8 @@ func (b *Blot) Plot(id string, width, height int) string {
 	script := "<script>"
 	script += fmt.Sprintf(`canvas = document.getElementById("%s");`, id)
 	script += `context = canvas.getContext("2d");`
+
+	script += b.MakeAxes()
 
 	for _, line := range b.Lines {
 		script += b.PlotLine(line)
