@@ -1,21 +1,20 @@
 package main
 
 import (
-	"flag"
-	"os"
+	"blot"
+	"fmt"
 )
-
-const Version = "0.0"
 
 func main() {
 
-	version := flag.Bool("version", false, "Print version number")
-	flag.Parse()
-
-	if *version {
-		println(Version)
-		os.Exit(0)
+	plot := blot.NewBlot()
+	line := blot.Line{
+		X: []float64{0, 1, 2, 3},
+		Y: []float64{0, 1, 0, 1},
 	}
+	plot.AddLine(line)
+	canvas := plot.Plot()
+	fmt.Println(canvas)
 
 }
 
