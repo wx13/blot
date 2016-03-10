@@ -30,7 +30,7 @@ func (b *Blot) AddLine(line Line) {
 func (b *Blot) Scale(xIn, yIn float64) (float64, float64) {
 	xOut := (xIn - b.OffsetX) * b.ScaleX
 	yOut := b.Height - (yIn-b.OffsetY)*b.ScaleY
-	return xOut, yOut
+	return xOut + b.Margin, yOut - b.Margin
 }
 
 func (b *Blot) SetSize(width, height int) {
@@ -39,9 +39,9 @@ func (b *Blot) SetSize(width, height int) {
 	minX, maxX, minY, maxY := b.GetMinMax()
 	b.OffsetX = minX
 	b.OffsetY = minY
-	b.ScaleX = b.Width / (maxX - minX)
-	b.ScaleY = b.Height / (maxY - minY)
-	b.Margin = b.Width / 20.0
+	b.Margin = (b.Width) / 20.0
+	b.ScaleX = (b.Width - 2*b.Margin) / (maxX - minX)
+	b.ScaleY = (b.Height - 2*b.Margin) / (maxY - minY)
 }
 
 func (b *Blot) GetMinMax() (minX, maxX, minY, maxY float64) {
@@ -76,6 +76,15 @@ func (b *Blot) MakeAxes() string {
 	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Width - b.Margin, b.Height - b.Margin)
 	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Width - b.Margin, b.Margin)
 	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Margin, b.Margin)
+
+	script += b.MakeAxisLabels()
+
+	return script
+}
+
+func (b *Blot) MakeAxisLabels() string {
+
+	script := ""
 
 	minX, maxX, minY, maxY := b.GetMinMax()
 	fontSize := int(0.5*b.Margin)
