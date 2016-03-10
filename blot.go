@@ -70,11 +70,7 @@ func (b *Blot) Plot(id string, width, height int) string {
 	script += `context = canvas.getContext("2d");`
 
 	for _, line := range b.Lines {
-		script += fmt.Sprintf("context.moveTo(%f,%f);", line.X[0], line.Y[0])
-		for k := range line.X {
-			script += fmt.Sprintf("context.lineTo(%f,%f);", line.X[k], line.Y[k])
-		}
-		script += "context.stroke();"
+		script += b.PlotLine(line)
 	}
 
 	script += "</script>"
@@ -83,3 +79,11 @@ func (b *Blot) Plot(id string, width, height int) string {
 
 }
 
+func (b *Blot) PlotLine(line Line) string {
+	script := fmt.Sprintf("context.moveTo(%f,%f);", line.X[0], line.Y[0])
+	for k := range line.X {
+		script += fmt.Sprintf("context.lineTo(%f,%f);", line.X[k], line.Y[k])
+	}
+	script += "context.stroke();"
+	return script
+}
