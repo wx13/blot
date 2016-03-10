@@ -26,6 +26,12 @@ func (b *Blot) AddLine(line Line) {
 	b.Lines = append(b.Lines, line)
 }
 
+func (b *Blot) Scale(xIn, yIn float64) (float64, float64) {
+	xOut := (xIn - b.OffsetX) * b.ScaleX
+	yOut := (yIn - b.OffsetY) * b.ScaleY
+	return xOut, yOut
+}
+
 func (b *Blot) SetSize(width, height int) {
 	b.Width = float64(width)
 	b.Height = float64(height)
@@ -80,9 +86,11 @@ func (b *Blot) Plot(id string, width, height int) string {
 }
 
 func (b *Blot) PlotLine(line Line) string {
-	script := fmt.Sprintf("context.moveTo(%f,%f);", line.X[0], line.Y[0])
+	x, y := b.Scale(line.X[0], line.Y[0])
+	script := fmt.Sprintf("context.moveTo(%f,%f);", x, y)
 	for k := range line.X {
-		script += fmt.Sprintf("context.lineTo(%f,%f);", line.X[k], line.Y[k])
+		x, y := b.Scale(line.X[k], line.Y[k])
+		script += fmt.Sprintf("context.lineTo(%f,%f);", x, y)
 	}
 	script += "context.stroke();"
 	return script
