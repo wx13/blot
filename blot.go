@@ -72,7 +72,7 @@ func (b *Blot) GetMinMax() (minX, maxX, minY, maxY float64) {
 
 func (b *Blot) MakeAxes() string {
 
-	script := "contex.beginPath();"
+	script := "context.beginPath();"
 	script += fmt.Sprintf("context.moveTo(%f, %f);", b.Margin, b.Margin)
 	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Margin, b.Height-b.Margin)
 	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Width-b.Margin, b.Height-b.Margin)
