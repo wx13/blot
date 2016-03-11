@@ -3,6 +3,8 @@ package blot
 import "fmt"
 
 type Style struct {
+	Color  string
+	Dashed bool
 }
 
 type Line struct {
@@ -70,12 +72,13 @@ func (b *Blot) GetMinMax() (minX, maxX, minY, maxY float64) {
 
 func (b *Blot) MakeAxes() string {
 
-	script := ""
+	script := "contex.beginPath();"
 	script += fmt.Sprintf("context.moveTo(%f, %f);", b.Margin, b.Margin)
-	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Margin, b.Height - b.Margin)
-	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Width - b.Margin, b.Height - b.Margin)
-	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Width - b.Margin, b.Margin)
+	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Margin, b.Height-b.Margin)
+	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Width-b.Margin, b.Height-b.Margin)
+	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Width-b.Margin, b.Margin)
 	script += fmt.Sprintf("context.lineTo(%f, %f);", b.Margin, b.Margin)
+	script += "context.stroke();"
 
 	script += b.MakeAxisLabels()
 
@@ -87,7 +90,7 @@ func (b *Blot) MakeAxisLabels() string {
 	script := ""
 
 	minX, maxX, minY, maxY := b.GetMinMax()
-	fontSize := int(0.5*b.Margin)
+	fontSize := int(0.5 * b.Margin)
 	script += fmt.Sprintf(`context.font = "%dpx Arial";`, fontSize)
 
 	script += `context.textAlign = "left";`
@@ -140,11 +143,15 @@ func (b *Blot) Plot(id string, width, height int) string {
 
 func (b *Blot) PlotLine(line Line) string {
 	x, y := b.Scale(line.X[0], line.Y[0])
-	script := fmt.Sprintf("context.moveTo(%f,%f);", x, y)
+	script := ""
+	script += "context.beginPath();"
+	script += fmt.Sprintf("context.moveTo(%f,%f);", x, y)
 	for k := range line.X {
 		x, y := b.Scale(line.X[k], line.Y[k])
 		script += fmt.Sprintf("context.lineTo(%f,%f);", x, y)
 	}
+	script += fmt.Sprintf(`context.strokeStyle = "%s";`, line.Style.Color)
 	script += "context.stroke();"
+	script += fmt.Sprintf(`context.strokeStyle = "";`)
 	return script
 }
