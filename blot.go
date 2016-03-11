@@ -151,7 +151,11 @@ func (b *Blot) PlotLine(line Line) string {
 		script += fmt.Sprintf("context.lineTo(%f,%f);", x, y)
 	}
 	script += fmt.Sprintf(`context.strokeStyle = "%s";`, line.Style.Color)
+	if line.Style.Dashed {
+		script += "context.setLineDash([5]);"
+	}
 	script += "context.stroke();"
 	script += fmt.Sprintf(`context.strokeStyle = "";`)
+	script += "context.setLineDash([]);"
 	return script
 }
