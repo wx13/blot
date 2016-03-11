@@ -18,15 +18,15 @@ func main() {
 	}
 	plot.AddLine(line)
 	line = blot.Line{
-		X: []float64{2, 3, 4, 5},
-		Y: []float64{-1, 1, -1, 1},
+		X: []float64{2, 3, 4, 5.8761},
+		Y: []float64{-1.0123, 1, -1, 1},
 		Style: blot.Style{
 			Color: "#0000ff",
 			Dashed: true,
 		},
 	}
 	plot.AddLine(line)
-	canvas := plot.Plot("example", 500, 300)
+	canvas := plot.Plot("example", 600, 400)
 	fmt.Println(canvas)
 
 }

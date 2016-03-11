@@ -90,32 +90,31 @@ func (b *Blot) MakeAxisLabels() string {
 	script := ""
 
 	minX, maxX, minY, maxY := b.GetMinMax()
-	fontSize := int(0.5 * b.Margin)
-	script += fmt.Sprintf(`context.font = "%dpx Arial";`, fontSize)
+	script += fmt.Sprintf(`context.font = "%dpx Arial";`, 10)
 
 	script += `context.textAlign = "left";`
 	script += `context.textBaseline = "middle";`
-	script += fmt.Sprintf(`context.fillText("%g", 0, %f);`, maxY, b.Margin)
-	script += fmt.Sprintf(`context.fillText("%g", 0, %f);`, (maxY+minY)/2.0, b.Height/2.0)
-	script += fmt.Sprintf(`context.fillText("%g", 0, %f);`, minY, b.Height-b.Margin)
+	script += fmt.Sprintf(`context.fillText("%.3g", 0, %f);`, maxY, b.Margin)
+	script += fmt.Sprintf(`context.fillText("%.3g", 0, %f);`, (maxY+minY)/2.0, b.Height/2.0)
+	script += fmt.Sprintf(`context.fillText("%.3g", 0, %f);`, minY, b.Height-b.Margin)
 
 	script += `context.textAlign = "right";`
 	script += `context.textBaseline = "middle";`
-	script += fmt.Sprintf(`context.fillText("%g", %f, %f);`, maxY, b.Width, b.Margin)
-	script += fmt.Sprintf(`context.fillText("%g", %f, %f);`, (maxY+minY)/2.0, b.Width, b.Height/2.0)
-	script += fmt.Sprintf(`context.fillText("%g", %f, %f);`, minY, b.Width, b.Height-b.Margin)
+	script += fmt.Sprintf(`context.fillText("%.3g", %f, %f);`, maxY, b.Width, b.Margin)
+	script += fmt.Sprintf(`context.fillText("%.3g", %f, %f);`, (maxY+minY)/2.0, b.Width, b.Height/2.0)
+	script += fmt.Sprintf(`context.fillText("%.3g", %f, %f);`, minY, b.Width, b.Height-b.Margin)
 
 	script += `context.textAlign = "center";`
 	script += `context.textBaseline = "top";`
-	script += fmt.Sprintf(`context.fillText("%g", %f, 0);`, maxX, b.Width-b.Margin)
-	script += fmt.Sprintf(`context.fillText("%g", %f, 0);`, (maxX+minX)/2.0, b.Width/2.0)
-	script += fmt.Sprintf(`context.fillText("%g", %f, 0);`, minX, b.Margin)
+	script += fmt.Sprintf(`context.fillText("%.3g", %f, 0);`, maxX, b.Width-b.Margin)
+	script += fmt.Sprintf(`context.fillText("%.3g", %f, 0);`, (maxX+minX)/2.0, b.Width/2.0)
+	script += fmt.Sprintf(`context.fillText("%.3g", %f, 0);`, minX, b.Margin)
 
 	script += `context.textAlign = "center";`
 	script += `context.textBaseline = "bottom";`
-	script += fmt.Sprintf(`context.fillText("%g", %f, %f);`, maxX, b.Width-b.Margin, b.Height)
-	script += fmt.Sprintf(`context.fillText("%g", %f, %f);`, (maxX+minX)/2.0, b.Width/2.0, b.Height)
-	script += fmt.Sprintf(`context.fillText("%g", %f, %f);`, minX, b.Margin, b.Height)
+	script += fmt.Sprintf(`context.fillText("%.3g", %f, %f);`, maxX, b.Width-b.Margin, b.Height)
+	script += fmt.Sprintf(`context.fillText("%.3g", %f, %f);`, (maxX+minX)/2.0, b.Width/2.0, b.Height)
+	script += fmt.Sprintf(`context.fillText("%.3g", %f, %f);`, minX, b.Margin, b.Height)
 
 	return script
 }
