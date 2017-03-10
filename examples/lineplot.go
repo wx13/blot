@@ -1,8 +1,8 @@
 package main
 
 import (
-	"blot"
 	"fmt"
+	"github.com/wx13/blot"
 )
 
 func main() {
